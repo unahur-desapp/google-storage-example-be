@@ -1,0 +1,5 @@
+**/logs/*
+**/node_modules/
+**/tmp
+**/*_packed.js
+biblapp-ff6b8-*.json
