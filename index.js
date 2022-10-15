@@ -3,11 +3,12 @@ const path = require('path')
 const bodyParser = require("body-parser");
 const express = require('express')
 const _ = require('lodash');
+const cors = require("cors");
 
 const app = express()
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
+app.use(cors());
 
 
 const { Storage } = require('@google-cloud/storage');
@@ -20,10 +21,10 @@ const gcs = new Storage({
 const storage = gcs.bucket('gs://biblapp-ff6b8.appspot.com');
 
 
-async function fetchImageFile(filename) {
+async function fetchFileFromGoogleStorage(filename) {
     const fileObject = storage.file(filename);
     const fileContents = await fileObject.download();
-    console.log('in fetchImageFile');
+    console.log('in fetchFileFromGoogleStorage');
     console.log(fileContents.length);
     return fileContents[0];
 }
@@ -35,12 +36,18 @@ app.get('/hello', (request, response) => {
 
 
 app.get('/image', async (request, response) => {
-    const downloadedImageFile = await fetchImageFile('justImages/guanaco-barrancas-coloradas.jpg');
+    const downloadedImageFile = await fetchFileFromGoogleStorage('justImages/guanaco-barrancas-coloradas.jpg');
     response.status(200);
     response.type('image/jpg');
     response.send(downloadedImageFile);
 });
 
+app.get('/pdf', async (request, response) => {
+    const downloadedPdfFile = await fetchFileFromGoogleStorage('pdfs/Borges Jorge - Ficciones.pdf');
+    response.status(200);
+    response.type('application/pdf');
+    response.send(downloadedPdfFile);
+});
 
 app.listen(process.env.PORT || 3123, null, null, () => console.log("Example app started"))
 
