@@ -19,7 +19,7 @@ const multerFileHandler = multer({ storage: multerStorage });
 // Google Storage config
 const gcs = new Storage({
     projectId: "biblapp-ff6b8",
-    keyFilename: "./biblapp-ff6b8-firebase-adminsdk-yd0y2-f66e718c5b.json"
+    keyFilename: "./biblapp-ff6b8-f08a481d7b33.json"
 })
 
 // Reference the Firebase account storage bucket
